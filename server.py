@@ -12,30 +12,31 @@ def SerialPortsScan():
         return 
     for p in ports:
         print ('\t-',p)
-def ConnectPort(name,baudrate=9600):
-    ser = serial.Serial(name, baudrate)
-    print ('Connected with ',ser.name)
-    return ser
+
 
 class ReadingSerialPort ():
-    def __init__(self, portName,BaudRate):
+    def __init__(self, portName,BaudRate=9600):
         self.portName = portName
         self.baudrate=BaudRate
         self.shouldRun=True
         try:
-            self.ser=ConnectPort(self.portName,baudrate=self.baudrate)
+            self.ser=self.connectPort()
         except Exception as e:
             print(f"Erronr connecting with port {self.portName}")
             print(e)
             self.shouldRun=False
-            
 
     def run(self):
         if (self.shouldRun==False):
             print('Stopping Serial thread')
-            raise SystemExit()
-        
+            raise SystemExit()     
         print('Started Serial thread')
+    
+    def connectPort(self):
+        ser = serial.Serial(self.portName, self.baudrate)
+        print ('Connected with ',ser.name)
+        return ser
+    
     def listen(self):
         global data,CLIENTS
         while True:
