@@ -14,7 +14,7 @@ def SerialPortsScan():
         print ('\t-',p)
 
 
-class ReadingSerialPort ():
+class SerialPort ():
     def __init__(self, portName,BaudRate=9600):
         self.portName = portName
         self.baudrate=BaudRate
@@ -97,5 +97,5 @@ if __name__ == "__main__":
 
     SerialPortsScan()
     print('Starting Serial thread')
-    serialThread=ReadingSerialPort('COM2',BAUD_RATE)
-    serialThread.listen()
+    serialPort=SerialPort('COM2',BAUD_RATE)
+    serialPort.listen()
