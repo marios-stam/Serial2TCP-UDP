@@ -1,8 +1,10 @@
 class FileManipulator():
     def __init__(self,fileName):
         self.fileName=fileName
-        self.arxeio= open(self.fileName, 'rb+')
-
+        try:
+            self.arxeio= open(self.fileName, 'rb+')#raises error if file doesnt already exists 
+        except:
+            self.arxeio= open(self.fileName, 'wb+')#creates file 
     def run(self):
         pass
 
