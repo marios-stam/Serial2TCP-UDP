@@ -8,13 +8,8 @@ class SerialPort ():
         self.File=File
         self.CLIENTS=clientsList
         self.shouldRun=True
-        try:
-            self.ser=self.connectPort()
-        except Exception as e:
-            print(f"Erronr connecting with port {self.portName}")
-            print(e)
-            self.shouldRun=False
-
+        self.ser=self.connectPort()
+        
     def run(self):
         if (self.shouldRun==False):
             print('Stopping Serial thread')
@@ -22,7 +17,16 @@ class SerialPort ():
         print('Started Serial thread')
     
     def connectPort(self):
-        ser = serial.Serial(self.portName, self.baudrate)
+        proceed=False
+        while not proceed:
+            try: 
+                ser = serial.Serial(self.portName, self.baudrate)
+                proceed=True
+            except  :
+                print('Couldnt connect to',self.portName)
+                input('\tHit enter to try again....')
+            
+
         print ('Connected with ',ser.name)
         return ser
     
@@ -35,7 +39,7 @@ class SerialPort ():
                 self.File.close()
                 break
              
-            self.File.write(data)
+            #self.File.write(data)
             for i in self.CLIENTS:
                 try:
                     i.sendData()

@@ -1,5 +1,3 @@
-import serial
-import serial.tools.list_ports as port_list
 import socket
 import threading
 import time,sys
@@ -17,11 +15,13 @@ class ThreadedServer(threading.Thread):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
         self.shouldRun=True
+
     def run(self):
         self.listen()
         
     def listen(self):
         self.sock.listen(5)
+        print('Server is listening in',socket.gethostbyname(socket.gethostname()) )
         while self.shouldRun:
             client, address = self.sock.accept()
             client.settimeout(60)
@@ -48,17 +48,14 @@ class ClientThread(threading.Thread):
         self.csocket.send(data)
                     
             
-        
-
-
 if __name__ == "__main__":
     data=bytes("Hi, This is from Server...",'utf-8')
     CLIENTS=[]
 
-    PORT_NUMBER = 666
+    PORT_NUMBER = 1234
     BAUD_RATE=115200   
 
-    server=ThreadedServer('',PORT_NUMBER)
+    server=ThreadedServer('0.0.0.0',PORT_NUMBER)
     server.daemon=True #stops when main programm ends
     server.start()
     
