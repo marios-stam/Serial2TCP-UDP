@@ -10,7 +10,3 @@ while True:
     for i in s:
         print(i)
     input()
-    
-    
-
-    
