@@ -1,4 +1,5 @@
 import socket,sys,time
+from SerialPort import SerialPort
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #address=input('Insert Server address:')
@@ -10,9 +11,13 @@ msg=bytes(1)
 
 start=time.clock()
 length=0
+
+serialPort=SerialPort('COM1')
+
 while True:
     diff=time.clock()-start
     msg = s.recv(20000)
+    serialPort.write(msg)#TODO: check if size of msg doesn lag the process
 
     length+=sys.getsizeof(msg)#get bytes of msg receieved
     

@@ -2,13 +2,14 @@ import serial
 import serial.tools.list_ports as port_list
 
 class SerialPort ():
-    def __init__ (self, portName,BaudRate,File,clientsList):
+    def __init__ (self, portName,BaudRate=115200,File=None,clientsList=None):
+        # predefined as None beacause they arent needed in the client side 
         self.portName = portName
         self.baudrate=BaudRate
         self.File=File
         self.CLIENTS=clientsList
         self.shouldRun=True
-        self.ser=self.connectPort()
+        self.connectPort()
         
     def run(self):
         if (self.shouldRun==False):
@@ -28,7 +29,7 @@ class SerialPort ():
             
 
         print ('Connected with ',ser.name)
-        return ser
+        self.ser=ser
     
     def listen(self):
         while True:
@@ -39,7 +40,7 @@ class SerialPort ():
                 self.File.close()
                 break
              
-            #self.File.write(data)
+            self.File.write(data)
             for i in self.CLIENTS:
                 try:
                     i.sendData()
@@ -48,6 +49,10 @@ class SerialPort ():
                     print(e)
                     self.CLIENTS.remove(i)    
     
+    def write(self,data):
+        self.ser.write(data)
+
+
     @staticmethod
     def portsScan():
         print('Searching for Serial ports:')
@@ -57,4 +62,5 @@ class SerialPort ():
             return 
         for p in ports:
             print ('\t-',p)
+
 
