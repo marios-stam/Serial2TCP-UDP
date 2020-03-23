@@ -1,5 +1,3 @@
-import serial
-import serial.tools.list_ports as port_list
 import socket
 import threading
 import time,sys
@@ -17,10 +15,13 @@ class ThreadedServer(threading.Thread):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
         self.shouldRun=True
+        self.IP=socket.gethostbyname(socket.gethostname())
+
     def run(self):
         self.listen()
         
     def listen(self):
+        print('Server is listening in',self.IP,':',self.port )
         self.sock.listen(5)
         while self.shouldRun:
             client, address = self.sock.accept()
@@ -48,17 +49,14 @@ class ClientThread(threading.Thread):
         self.csocket.send(data)
                     
             
-        
-
-
 if __name__ == "__main__":
     data=bytes("Hi, This is from Server...",'utf-8')
     CLIENTS=[]
 
-    PORT_NUMBER = 666
+    PORT_NUMBER = 1234
     BAUD_RATE=115200   
 
-    server=ThreadedServer('',PORT_NUMBER)
+    server=ThreadedServer('0.0.0.0',PORT_NUMBER)
     server.daemon=True #stops when main programm ends
     server.start()
     
@@ -68,8 +66,9 @@ if __name__ == "__main__":
     
     SerialPort.portsScan()
     
-    print('Starting Serial thread')
-    serialPort=SerialPort('COM4',BAUD_RATE,File,CLIENTS)
+    COMport=input('Enter the  COM port which is going to be shared(COMx):')
+    #print('Starting Serial thread')
+    serialPort=SerialPort(COMport,BAUD_RATE,File,CLIENTS)
     serialPort.listen()
     print('Telos!!!')
     input('Press enter to terminate...')
