@@ -15,13 +15,14 @@ class ThreadedServer(threading.Thread):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.host, self.port))
         self.shouldRun=True
+        self.IP=socket.gethostbyname(socket.gethostname())
 
     def run(self):
         self.listen()
         
     def listen(self):
+        print('Server is listening in',self.IP,':',self.port )
         self.sock.listen(5)
-        print('Server is listening in',socket.gethostbyname(socket.gethostname()) )
         while self.shouldRun:
             client, address = self.sock.accept()
             client.settimeout(60)
@@ -65,8 +66,9 @@ if __name__ == "__main__":
     
     SerialPort.portsScan()
     
-    print('Starting Serial thread')
-    serialPort=SerialPort('COM4',BAUD_RATE,File,CLIENTS)
+    COMport=input('Enter the  COM port which is going to be shared(COMx):')
+    #print('Starting Serial thread')
+    serialPort=SerialPort(COMport,BAUD_RATE,File,CLIENTS)
     serialPort.listen()
     print('Telos!!!')
     input('Press enter to terminate...')

@@ -34,7 +34,7 @@ class SerialPort ():
     def listen(self):
         while True:
             try:
-                data=(self.ser.read(100))
+                data=(self.ser.read(20))
             except:
                 print('COM port disconnected..Closing file')
                 self.File.close()
