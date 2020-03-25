@@ -65,11 +65,16 @@ if __name__ == "__main__":
     File.write(data)
 
     
-    SerialPort.portsScan()
+    desiredModule='Arduino'   
+    try:
+        COMport=SerialPort.findPortOf(desiredModule)#input('Enter the  COM port which is going to be shared(COMx):')
+        print(desiredModule,'found at:'+COMport)
+        serialPort=SerialPort(COMport,BAUD_RATE,File,CLIENTS)
+        serialPort.listen()
+    except Exception as e:
+        print(e)
+        
     
-    COMport=input('Enter the  COM port which is going to be shared(COMx):')
-    #print('Starting Serial thread')
-    serialPort=SerialPort(COMport,BAUD_RATE,File,CLIENTS)
-    serialPort.listen()
-    print('Telos!!!')
+    
+    print('Finished!!!')
     input('Press enter to terminate...')

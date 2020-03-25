@@ -56,7 +56,7 @@ class SerialPort ():
 
 
     @staticmethod
-    def portsScan():
+    def ScanPorts():
         print('Searching for Serial ports:')
         ports = list(port_list.comports())
         if len(ports)==0:
@@ -64,5 +64,24 @@ class SerialPort ():
             return 
         for p in ports:
             print ('\t-',p)
+        
+        return ports 
+        
+    @staticmethod
+    def findPortOf(Module):
+        ports=SerialPort.ScanPorts()
+        desiredPort=None
+        retry=True
+        while (retry):
+            for p in ports:
+                if (Module in p[1]): desiredPort=p[0] #p[1] is the name and p[0] is the COM Port (p[0]='COMx')
+            
+            if(desiredPort==None):#if couldnt found the Module
+                answer=input("Couldn't find "+Module+".......Retry (y/n)?")
+                
+            retry= False if (desiredPort!=None or answer.capitalize()=='N') else True
 
-
+        if(desiredPort==None):
+            raise Exception("Sorry.....couldn't find "+Module+"!")
+        return desiredPort
+        
