@@ -32,9 +32,11 @@ class SerialPort ():
         self.ser=ser
     
     def listen(self):
+        global data
         while True:
             try:
                 data=(self.ser.read(20))
+                #print(data)
             except:
                 print('COM port disconnected..Closing file')
                 self.File.close()
@@ -43,7 +45,7 @@ class SerialPort ():
             self.File.write(data)
             for i in self.CLIENTS:
                 try:
-                    i.sendData()
+                    i.sendData(data)
                 except Exception as e:
                     print(f"Client{i.clientAddress} disconnected")
                     print(e)

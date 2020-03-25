@@ -45,12 +45,13 @@ class ClientThread(threading.Thread):
     def run(self):
         self.csocket.send(data)
 
-    def sendData(self):
+    def sendData(self,data):
         self.csocket.send(data)
                     
+data=bytes("Hi, This is from Server...",'utf-8')
             
 if __name__ == "__main__":
-    data=bytes("Hi, This is from Server...",'utf-8')
+    
     CLIENTS=[]
 
     PORT_NUMBER = 1234

@@ -17,7 +17,7 @@ serialPort=SerialPort(COMport)
 
 while True:
     diff=time.clock()-start
-    msg = s.recv(40000)
+    msg = s.recv(20000)
     serialPort.write(msg)#TODO: check if size of msg doesn lag the process
 
     length+=sys.getsizeof(msg)#get bytes of msg receieved
