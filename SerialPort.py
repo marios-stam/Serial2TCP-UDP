@@ -23,8 +23,9 @@ class SerialPort ():
             try: 
                 ser = serial.Serial(self.portName, self.baudrate)
                 proceed=True
-            except  :
+            except Exception as e :
                 print('Couldnt connect to',self.portName)
+                print(e)
                 input('\tHit enter to try again....')
             
 
@@ -56,7 +57,7 @@ class SerialPort ():
 
 
     @staticmethod
-    def ScanPorts():
+    def scanPorts():
         print('Searching for Serial ports:')
         ports = list(port_list.comports())
         if len(ports)==0:
@@ -69,7 +70,7 @@ class SerialPort ():
         
     @staticmethod
     def findPortOf(Module):
-        ports=SerialPort.ScanPorts()
+        ports=SerialPort.scanPorts()
         desiredPort=None
         retry=True
         while (retry):
@@ -85,3 +86,5 @@ class SerialPort ():
             raise Exception("Sorry.....couldn't find "+Module+"!")
         return desiredPort
         
+if __name__=='__main__':
+    SerialPort.scanPorts()

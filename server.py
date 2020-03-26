@@ -26,7 +26,7 @@ class ThreadedServer(threading.Thread):
         while self.shouldRun:
             client, address = self.sock.accept()
             client.settimeout(60)
-            print(f'Conection from {address}')
+            #print(f'Conection from {address}')
             CLIENTS.append( ClientThread(client,address) )
             CLIENTS[-1].daemon=True #stops when main programm ends
             CLIENTS[-1].start()
@@ -40,7 +40,7 @@ class ClientThread(threading.Thread):
         threading.Thread.__init__(self)
         self.clientAddress=clientAddress
         self.csocket = clientsocket
-        print ("New Client added: ", clientAddress)
+        print ("New Client added:",clientAddress[0]+":"+str(clientAddress[1]))
 
     def run(self):
         self.csocket.send(data)
