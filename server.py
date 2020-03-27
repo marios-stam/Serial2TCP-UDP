@@ -26,7 +26,7 @@ class ThreadedServer(threading.Thread):
         while self.shouldRun:
             client, address = self.sock.accept()
             client.settimeout(60)
-            print(f'Conection from {address}')
+            #print(f'Conection from {address}')
             CLIENTS.append( ClientThread(client,address) )
             CLIENTS[-1].daemon=True #stops when main programm ends
             CLIENTS[-1].start()
@@ -40,17 +40,18 @@ class ClientThread(threading.Thread):
         threading.Thread.__init__(self)
         self.clientAddress=clientAddress
         self.csocket = clientsocket
-        print ("New Client added: ", clientAddress)
+        print ("New Client added:",clientAddress[0]+":"+str(clientAddress[1]))
 
     def run(self):
         self.csocket.send(data)
 
-    def sendData(self):
+    def sendData(self,data):
         self.csocket.send(data)
                     
+data=bytes("Hi, This is from Server...",'utf-8')
             
 if __name__ == "__main__":
-    data=bytes("Hi, This is from Server...",'utf-8')
+    
     CLIENTS=[]
 
     PORT_NUMBER = 1234
@@ -64,11 +65,16 @@ if __name__ == "__main__":
     File.write(data)
 
     
-    SerialPort.portsScan()
+    desiredModule='Arduino'   
+    try:
+        COMport=SerialPort.findPortOf(desiredModule)#input('Enter the  COM port which is going to be shared(COMx):')
+        print(desiredModule,'found at:'+COMport)
+        serialPort=SerialPort(COMport,BAUD_RATE,File,CLIENTS)
+        serialPort.listen()
+    except Exception as e:
+        print(e)
+        
     
-    COMport=input('Enter the  COM port which is going to be shared(COMx):')
-    #print('Starting Serial thread')
-    serialPort=SerialPort(COMport,BAUD_RATE,File,CLIENTS)
-    serialPort.listen()
-    print('Telos!!!')
+    
+    print('Finished!!!')
     input('Press enter to terminate...')
