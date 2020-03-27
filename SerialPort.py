@@ -48,9 +48,10 @@ class SerialPort ():
                 try:
                     i.sendData(data)
                 except Exception as e:
-                    print(f"Client{i.clientAddress} disconnected")
+                    print(f"-Client{i.clientAddress} disconnected")
                     print(e)
-                    self.CLIENTS.remove(i)    
+                    print()
+                    self.CLIENTS.remove(i)#TODO: check if thread is bein killed or keep running    
     
     def write(self,data):
         self.ser.write(data)
