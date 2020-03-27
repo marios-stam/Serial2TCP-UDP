@@ -28,4 +28,5 @@ if(__name__=='__main__'):
     server=ThreadedPingServer("0.0.0.0",PING_PORT)
     server.daemon=True #stops when main programm ends
     server.start()
+    input()
     
