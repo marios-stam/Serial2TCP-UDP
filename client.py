@@ -1,10 +1,11 @@
 import socket,sys,time
 from SerialPort import SerialPort
+from pinging.client import getServerIP
 SERVER_NAME='DESKTOP-TDO0FFA'
 PORT_NUMBER=1234
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-address='192.168.2.11'#socket.gethostbyname(SERVER_NAME) 
+address=getServerIP()#socket.gethostbyname(SERVER_NAME)#'192.168.2.11' 
 print('Server IP:'+address)
 s.connect((address, PORT_NUMBER))
 print('Connected !!!')

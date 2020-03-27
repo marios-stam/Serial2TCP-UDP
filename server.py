@@ -3,7 +3,7 @@ import threading
 import time,sys
 from FileCommands import FileManipulator
 from SerialPort import SerialPort
-
+from pinging.server import ThreadedPingServer,PING_PORT
 
 
 class ThreadedServer(threading.Thread):
@@ -56,7 +56,13 @@ if __name__ == "__main__":
 
     PORT_NUMBER = 1234
     BAUD_RATE=115200   
+    
+    print('-Starting Ping Server')
+    Pingserver=ThreadedPingServer("0.0.0.0",PING_PORT)
+    Pingserver.daemon=True #stops when main programm ends
+    Pingserver.start()
 
+    print('-Starting Main Server')
     server=ThreadedServer('0.0.0.0',PORT_NUMBER)
     server.daemon=True #stops when main programm ends
     server.start()

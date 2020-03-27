@@ -20,9 +20,7 @@ class ThreadedPingServer(threading.Thread):
         # Listen for incoming datagrams
         while(True):
             message,address = self.sock.recvfrom(bufferSize)
-            print("Message from Client:{}".format(message))
-            print("Client IP Address:{}".format(address))
-            print()
+            print('-Ping Server:New approach->'+address[0])
             # Sending a reply to client
             self.sock.sendto(msgFromServer, address)
 
