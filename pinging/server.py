@@ -5,6 +5,11 @@ msgFromServer= str.encode('THIS IS SERIAL2TCP/UDP SERVER')
 
 import threading
 class ThreadedPingServer(threading.Thread):
+    """This Server Thread  helps clients to find the server IP 
+        Attributes: 
+        	host  (str): The IP of the host. 
+            port  (int): The TCP port number.
+    """
     def __init__(self, host, port):
         threading.Thread.__init__(self)
         self.host = host
@@ -16,6 +21,9 @@ class ThreadedPingServer(threading.Thread):
         self.listen()
         
     def listen(self):
+        """Listening to messages from other clients
+            and responds them back with  a specific mesage in order to get recognised.
+        """
         print("UDP server up and listening")
         # Listen for incoming datagrams
         while(True):

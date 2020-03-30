@@ -2,6 +2,14 @@ import serial
 import serial.tools.list_ports as port_list
 
 class SerialPort ():
+    """Contains all the functions necessary for COM (serial) Port interfacing.
+
+        Attributes: 
+        	portName 	(str): The name of COM Port (e.g. ‘COM1’). 
+            Baudrate  	(int): The baudrate of connection.Predefined at 115200.
+	        File        (file):The file where data are going to be saved.
+	        ClientList	(List of threads):Contains all the threads of clients
+    """
     def __init__ (self, portName,BaudRate=115200,File=None,clientsList=None):
         # predefined as None beacause they arent needed in the client side 
         self.portName = portName
@@ -18,6 +26,7 @@ class SerialPort ():
         print('Started Serial thread')
     
     def connectPort(self):
+        """Conects to COM Port and saves connection to variable ser"""
         proceed=False
         while not proceed:
             try: 
@@ -33,6 +42,11 @@ class SerialPort ():
         self.ser=ser
     
     def listen(self):
+        """In every loop: 
+                -reads CHUNK_SIZE bytes from Serial Port
+                -writes data to  file
+                -sends data to every Client in the ClientList via ClientThread.sendData() method  
+        """
         global data
         while True:
             try:
@@ -43,7 +57,7 @@ class SerialPort ():
                 self.File.close()
                 break
              
-            self.File.write(data)
+            self.File.write(data)#writes data to the file
             for i in self.CLIENTS:
                 try:
                     i.sendData(data)
@@ -54,6 +68,10 @@ class SerialPort ():
                     self.CLIENTS.remove(i)#TODO: check if thread is bein killed or keep running    
     
     def write(self,data):
+        """Writes data to Serial Port
+         Parameters: 
+            data (Bytes): The data to be sent.
+        """
         self.ser.write(data)
 
 
@@ -71,12 +89,22 @@ class SerialPort ():
         
     @staticmethod
     def findPortOf(Module):
-        ports=SerialPort.scanPorts()
+        """Finds in which port is 'Module' connected to
+         Parameters: 
+             Module     (String): The name of the desired Module.
+         Returns:
+            desiredPort (String):The COM port name in which the module is connected
+         :raises:
+            'Sorry.....couldn't find Module!': if Module  is not connected to PC.
+
+        
+        """  
         desiredPort=None
         retry=True
         while (retry):
+            ports=SerialPort.scanPorts()
             for p in ports:
-                if (Module in p[1]): desiredPort=p[0] #p[1] is the name and p[0] is the COM Port (p[0]='COMx')
+                if (Module in p[1]): desiredPort=p[0] #p[1]-->name and p[0]-->COM Port (p[0]='COMx')
             
             if(desiredPort==None):#if couldnt found the Module
                 answer=input("Couldn't find "+Module+".......Retry (y/n)?")
@@ -89,3 +117,4 @@ class SerialPort ():
         
 if __name__=='__main__':
     SerialPort.scanPorts()
+    help(SerialPort)
