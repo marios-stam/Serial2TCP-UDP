@@ -1,0 +1,3 @@
+       CNCBUS0 FriendlyName=""
+       CNCA0 FriendlyName="com0com - serial port emulator CNCA0 (COM7)"
+       CNCB0 FriendlyName="com0com - serial port emulator CNCB0 (COM6)"
