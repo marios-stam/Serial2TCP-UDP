@@ -1,10 +1,12 @@
 import socket,sys,time
 from SerialPort import SerialPort
 from pinging.client import getServerIP
+from GLOBAL_VARIABLES import TCP_READ_SIZE
+
 #from com0com.com0comAPI import virtualCOMPorts 
 SERVER_NAME='DESKTOP-TDO0FFA'
 PORT_NUMBER=1234
-CHUNK_SIZE=20
+
 
 #Searching and connecting to server
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,7 +29,7 @@ serialPort=SerialPort(COMport)
 
 while True:
     #diff=time.clock()-start
-    msg = s.recv(CHUNK_SIZE)
+    msg = s.recv(TCP_READ_SIZE)
     serialPort.write(msg)#TODO: check if size of msg doesn lag the process
     #length+=sys.getsizeof(msg)#get bytes of msg receieved
     """ 

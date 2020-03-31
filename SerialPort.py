@@ -1,7 +1,8 @@
 import serial
 import serial.tools.list_ports as port_list
+from GLOBAL_VARIABLES import TCP_READ_SIZE
 
-CHUNK_SIZE=2
+
 class SerialPort ():
     """Contains all the functions necessary for COM (serial) Port interfacing.
 
@@ -51,7 +52,7 @@ class SerialPort ():
         global data
         while True:
             try:
-                bytesToRead = max(CHUNK_SIZE, min(2048, self.ser.in_waiting))
+                bytesToRead = max(TCP_READ_SIZE, min(2048, self.ser.in_waiting))
                 #print(bytesToRead)
                 data=(self.ser.read(bytesToRead))
                 #data=(self.ser.read(CHUNK_SIZE))
