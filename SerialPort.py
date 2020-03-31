@@ -1,6 +1,7 @@
 import serial
 import serial.tools.list_ports as port_list
 
+CHUNK_SIZE=2
 class SerialPort ():
     """Contains all the functions necessary for COM (serial) Port interfacing.
 
@@ -50,14 +51,17 @@ class SerialPort ():
         global data
         while True:
             try:
-                data=(self.ser.read(20))
+                bytesToRead = max(CHUNK_SIZE, min(2048, self.ser.in_waiting))
+                #print(bytesToRead)
+                data=(self.ser.read(bytesToRead))
+                #data=(self.ser.read(CHUNK_SIZE))
                 #print(data)
             except:
                 print('COM port disconnected..Closing file')
                 self.File.close()
                 break
              
-            self.File.write(data)#writes data to the file
+            #self.File.write(data)#writes data to the file
             for i in self.CLIENTS:
                 try:
                     i.sendData(data)
