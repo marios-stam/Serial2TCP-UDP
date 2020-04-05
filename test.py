@@ -20,7 +20,7 @@ def kill(programm):
 cmd=r'C:\Users\mario\Desktop\MARIOS\FORMULA\Telemetry\TelemetryTester\"UoP Telemetry GUI".exe'
 process = subprocess.Popen(cmd,shell=True)
 
-time.sleep(2)#wait 2 secs to load the GUI
-kill(r'UoP Telemetry GUI.exe')
+"""time.sleep(2)#wait 2 secs to load the GUI
+kill(r'UoP Telemetry GUI.exe')"""
 
 

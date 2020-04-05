@@ -1,6 +1,6 @@
 import serial
 import serial.tools.list_ports as port_list
-from GLOBAL_VARIABLES import TCP_READ_SIZE
+from GLOBAL_VARIABLES import SERIAL_READ_SIZE
 
 
 class SerialPort ():
@@ -57,7 +57,7 @@ class SerialPort ():
 
 
             try:
-                bytesToRead = max(TCP_READ_SIZE, min(2048, self.ser.in_waiting))
+                bytesToRead = max(SERIAL_READ_SIZE, self.ser.in_waiting)
                 #print(bytesToRead)
                 data=(self.ser.read(bytesToRead))
                 #print(len(data))

@@ -2,6 +2,8 @@ import socket,sys,time,subprocess,os,psutil,signal
 from SerialPort import SerialPort
 from pinging.client import getServerIP
 from GLOBAL_VARIABLES import TCP_READ_SIZE
+import logging,time
+
 def kill(programm):
     for pid in (process.pid for process in psutil.process_iter() if process.name()==programm):
         os.kill(pid,signal.SIGTERM)
@@ -11,6 +13,7 @@ def handler(signum, frame):
     kill(r'UoP Telemetry GUI.exe')
     # force quit
     sys.exit(1)  # only 0 means "ok"
+    quit()
 
 signal.signal(signal.SIGINT, handler)
 #signal.signal(signal.SIGHUP, handler)
@@ -50,16 +53,18 @@ serialPort=SerialPort(COMport)
 while True:
     #diff=time.clock()-start
     try:
-        msg = s.recv(TCP_READ_SIZE)
+        msg = s.recv(TCP_READ_SIZE)#receiving from socket
+        
+        t0=time.time()
+        buffer_before_writing=serialPort.ser.out_waiting
         serialPort.write(msg)#TODO: check if size of msg doesn lag the process
-        #length+=sys.getsizeof(msg)#get bytes of msg receieved
-        """ 
-        if (diff>1):
-        print(length/1000,'ΚBps')
-        length=0
-        start=time.clock()
-        """
+        dt=(time.time()-t0)#secs
+        Kbytes=len(msg)/1024
+        if dt!=0:throughput=Kbytes/dt#KBps
+        #print( len(msg) , dt*1000, throughput  )
+
     except Exception as e:
         print(e)
         kill(r'UoP Telemetry GUI.exe')
+        sys.exit(1)
     
