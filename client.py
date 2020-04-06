@@ -53,8 +53,8 @@ serialPort=SerialPort(COMport)
 while True:
     #diff=time.clock()-start
     try:
-        msg = s.recv(TCP_READ_SIZE)#receiving from socket
-        
+        msg = s.recv(1024)#receiving from socket
+        if len(msg)<1024:print(len(msg))
         t0=time.time()
         buffer_before_writing=serialPort.ser.out_waiting
         serialPort.write(msg)#TODO: check if size of msg doesn lag the process
