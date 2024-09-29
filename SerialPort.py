@@ -1,6 +1,6 @@
 import serial
 import serial.tools.list_ports as port_list
-from GLOBAL_VARIABLES import TCP_READ_SIZE
+from GLOBAL_VARIABLES import SERIAL_READ_SIZE
 
 
 class SerialPort ():
@@ -49,14 +49,19 @@ class SerialPort ():
                 -writes data to  file
                 -sends data to every Client in the ClientList via ClientThread.sendData() method  
         """
-        global data
+        
         while True:
+
+            if( len(self.CLIENTS)==0 ):
+                continue
+
+
             try:
-                bytesToRead = max(TCP_READ_SIZE, min(2048, self.ser.in_waiting))
+                bytesToRead = max(SERIAL_READ_SIZE, self.ser.in_waiting)
                 #print(bytesToRead)
                 data=(self.ser.read(bytesToRead))
-                #data=(self.ser.read(CHUNK_SIZE))
-                #print(data)
+                #print(len(data))
+
             except:
                 print('COM port disconnected..Closing file')
                 self.File.close()
@@ -79,6 +84,10 @@ class SerialPort ():
         """
         self.ser.write(data)
 
+    def resetBuffers(self):
+        self.ser.flushInput()
+        self.ser.flushOutput()
+        print("Flushed Everything")
 
     @staticmethod
     def scanPorts():

@@ -37,7 +37,13 @@ class ThreadedServer(threading.Thread):
         while self.shouldRun:
             client, address = self.sock.accept()#waits for a new collection from a client
             client.settimeout(60)
-            #print(f'Conection from {address}')
+
+            if (len(CLIENTS)==0):#if this is the first client reset all buffers which my cause lag
+                print(serialPort.ser.inWaiting())
+                #input('Press to reset buffers')
+                serialPort.resetBuffers()
+                print(serialPort.ser.inWaiting())
+
             CLIENTS.append( ClientThread(client,address) )#creates a new thread for every client
             #                                              and adds it to the CLIENTS list                  
             CLIENTS[-1].daemon=True #stops when main programm ends
